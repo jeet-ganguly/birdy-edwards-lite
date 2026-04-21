@@ -62,6 +62,26 @@ It is designed for investigators who want fast, reproducible results on modest h
 
 ---
 
+## ⚠️ Disclaimer
+
+> BIRDY-EDWARDS LITE is developed strictly for **authorized intelligence, law enforcement, and academic research purposes only.**
+>
+> **Scope of data access:**
+> - This tool operates exclusively using a valid Facebook session authenticated by the operator
+> - It only accesses **publicly visible** profile data, posts, photos, reels, and comments
+> - It does **not** access private messages, locked profiles, restricted content, or any data not visible to a logged-in user
+> - It does **not** use bots, fake accounts, or automated account creation — the operator supplies their own authenticated session
+>
+> **Legal responsibility:**
+> - This tool must only be used on profiles and content where you have **explicit legal authorization** to collect and analyze data
+> - Use without authorization may violate Facebook's Terms of Service, applicable privacy laws (GDPR, IT Act, DPDP Act), and local regulations
+> - The developer assumes **no liability** for misuse, unauthorized data collection, or any harm caused by improper use
+> - All investigations are the **sole responsibility of the operator**
+>
+> By using BIRDY-EDWARDS LITE, you confirm that your use is lawful, authorized, and compliant with all applicable laws in your jurisdiction.
+
+---
+
 ## Comparison — Lite vs Full
 
 | Capability | Lite | Full (AI) |
@@ -195,23 +215,17 @@ Clicking any node or interactor row opens a side panel with interaction samples 
 
 ---
 
-## ⚠️ Disclaimer
+## How You Can Help
 
-> BIRDY-EDWARDS LITE is developed strictly for **authorized intelligence, law enforcement, and academic research purposes only.**
->
-> **Scope of data access:**
-> - This tool operates exclusively using a valid Facebook session authenticated by the operator
-> - It only accesses **publicly visible** profile data, posts, photos, reels, and comments
-> - It does **not** access private messages, locked profiles, restricted content, or any data not visible to a logged-in user
-> - It does **not** use bots, fake accounts, or automated account creation — the operator supplies their own authenticated session
->
-> **Legal responsibility:**
-> - This tool must only be used on profiles and content where you have **explicit legal authorization** to collect and analyze data
-> - Use without authorization may violate Facebook's Terms of Service, applicable privacy laws (GDPR, IT Act, DPDP Act), and local regulations
-> - The developer assumes **no liability** for misuse, unauthorized data collection, or any harm caused by improper use
-> - All investigations are the **sole responsibility of the operator**
->
-> By using BIRDY-EDWARDS LITE, you confirm that your use is lawful, authorized, and compliant with all applicable laws in your jurisdiction.
+If you find BIRDY-EDWARDS useful or interesting, here are a few ways you can support the project:
+
+- ⭐ **Star the repository** — it helps others discover the tool
+- 🐛 **Report bugs** — open an Issue if something isn't working
+- 🔧 **Contribute** — check the [Contributing](#contributing) section to get started
+- 📢 **Share it** — post it in OSINT communities, forums, X or with colleagues who might find it useful
+- 💬 **Give feedback** — suggestions for new features or improvements are always welcome
+
+Every contribution, big or small, helps build better tools for the OSINT and threat intelligence community.
 
 ---
 
