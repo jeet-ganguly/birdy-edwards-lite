@@ -101,7 +101,7 @@ app = Flask(
     template_folder=os.path.join(BASE_DIR, 'templates'),
     static_folder=os.path.join(BASE_DIR, 'static'),
 )
-app.secret_key = 'birdy-edwards-lite-secret'
+app.secret_key = os.environ.get('SECRET_KEY') or os.urandom(32)
  
 # ensure DB on startup
 init_db(DB_FILE)
