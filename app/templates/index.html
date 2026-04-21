@@ -1140,7 +1140,7 @@
           <div class="form-group" style="margin-bottom:10px">
             <label class="form-label" for="cookieStr">Cookie JSON Array</label>
             <textarea class="form-textarea" id="cookieStr" rows="4"
-              placeholder='Paste JSON array from DevTools&#10;[{"name":"c_user","value":"..."},{"name":"xs","value":"..."}]'></textarea>
+              placeholder='Paste JSON format cookies&#10;[{"name":"c_user","value":"..."},{"name":"xs","value":"..."}]'></textarea>
             <div class="cookie-hint">▸ Facebook → Cookie Editor extenssion → Export in JSON → Paste Here</div>
           </div>
           <button class="btn-sm" id="btnSaveCookies" onclick="importCookies()" type="button">SAVE COOKIES</button>
@@ -1505,7 +1505,7 @@
       } catch (e) { alert('Network error: ' + e); return; }
 
       buildSteps();
-      document.getElementById('pipelineTitle').textContent = 'PIPELINE ACTIVE';
+      document.getElementById('pipelineTitle').textContent = 'INVESTIGATION ACTIVE';
       document.getElementById('pipelineSub').textContent   = url;
       document.getElementById('pipelineOverlay').classList.add('active');
       pollTimer = setInterval(pollPipeline, 1500);
