@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birdy-Edwards Lite · Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-sans: 'Google Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0a0a0b;
+      --bg-elev: #141416;
+      --bg-card: #1a1a1d;
+      --bg-hover: #222226;
+      --border: #2a2a2e;
+      --border-strong: #3a3a40;
+      --text: #f5f5f7;
+      --text-dim: #c0c0c8;
+      --text-faint: #8a8a92;
+      --accent: #d4a24c;
+      --accent-bright: #f4c46b;
+      --accent-dim: #8a6a30;
+      --accent-glow: rgba(212, 162, 76, 0.15);
+      --danger: #ff6b6b;
+      --success: #7dd87d;
+      --info: #6ab6d4;
+      --noise-opacity: 0.025;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      --scan-light: #7dd87d;
+      --scan-med: #d4a24c;
+      --scan-deep: #ff6b6b;
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f2ea;
+      --bg-elev: #ffffff;
+      --bg-card: #fcfaf4;
+      --bg-hover: #f0ebdc;
+      --border: #d8d2c0;
+      --border-strong: #b8b0a0;
+      --text: #1a1a1d;
+      --text-dim: #3a3a40;
+      --text-faint: #6a6a72;
+      --accent: #8a5a1a;
+      --accent-bright: #a06828;
+      --accent-dim: #d4a24c;
+      --accent-glow: rgba(138, 90, 26, 0.08);
+      --danger: #c0392b;
+      --success: #2a8a4a;
+      --info: #2a6a8a;
+      --noise-opacity: 0.03;
+      --shadow: 0 6px 20px rgba(60, 40, 10, 0.1);
+      --scan-light: #2a8a4a;
+      --scan-med: #8a5a1a;
+      --scan-deep: #c0392b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+    }
+
+    html,
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1000;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+      opacity: var(--noise-opacity);
+      mix-blend-mode: overlay;
+    }
+
+    /* topbar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-elev);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background-image: url('/logo');
+      background-size: cover;
+      background-position: center;
+      border: 1px solid var(--accent-dim);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .brand-text h1 {
+      font-weight: 900;
+      font-size: 18px;
+      letter-spacing: 0.5px;
+      color: var(--text);
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .brand-text .subtitle {
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-top: 4px;
+      text-transform: uppercase;
+    }
+
+    .brand-badge {
+      margin-left: 10px;
+      padding: 3px 8px;
+      font-size: 11px;
+      background: var(--accent);
+      color: #0a0a0b;
+      border-radius: 3px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1 }
+      50% { opacity: 0.4 }
+    }
+
+    .theme-toggle {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* page */
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 28px 60px;
+    }
+
+    /* hero */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+      margin-bottom: 48px;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-glow);
+      border: 1px solid var(--accent-dim);
+      padding: 5px 12px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-tag::before {
+      content: '▸';
+      font-size: 10px;
+    }
+
+    .hero-title {
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: var(--accent);
+      position: relative;
+    }
+
+    .hero-title em::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 100%;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 1px;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 28px;
+      font-weight: 500;
+    }
+
+    .hero-features {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .hero-feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-dim);
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .hero-feature::before {
+      content: '';
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      background: var(--accent-glow);
+      border: 1px solid var(--accent-dim);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%23d4a24c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 12px;
+    }
+
+    .hero-stat {
+      padding: 14px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+    }
+
+    .hero-stat .num {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--accent);
+    }
+
+    .hero-stat .lbl {
+      font-size: 10px;
+      color: var(--text-faint);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    /* scan panel */
+    .scan-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent);
+      border-radius: 12px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scan-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .scan-panel-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scan-panel-title::before {
+      content: '▸';
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 500;
+      font-family: var(--font-sans);
+      transition: border-color 0.15s;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-faint);
+    }
+
+    .form-textarea {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 500;
+      font-family: 'Courier New', monospace;
+      resize: vertical;
+      min-height: 90px;
+      transition: border-color 0.15s;
+      outline: none;
+      line-height: 1.5;
+    }
+
+    .form-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .form-textarea::placeholder {
+      color: var(--text-faint);
+      font-family: var(--font-sans);
+      font-size: 13px;
+    }
+
+    /* cookie bar */
+    .cookie-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      transition: all 0.2s;
+      gap: 10px;
+    }
+
+    .cookie-bar.ok {
+      background: rgba(125, 216, 125, 0.10);
+      border: 1px solid rgba(125, 216, 125, 0.25);
+      color: var(--success);
+    }
+
+    .cookie-bar.warn {
+      background: rgba(255, 107, 107, 0.10);
+      border: 1px solid rgba(255, 107, 107, 0.25);
+      color: var(--danger);
+    }
+
+    .cookie-bar.idle {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text-faint);
+    }
+
+    .cookie-bar-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cookie-bar-btns {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* cookie import collapse */
+    .cookie-import-box {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .cookie-import-box.open {
+      display: block;
+    }
+
+    .cookie-hint {
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--text-faint);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    /* small buttons */
+    .btn-sm {
+      padding: 6px 11px;
+      background: transparent;
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-sm:hover {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+
+    .btn-sm:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    /* scan depth */
+    .scan-depth-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .scan-depth-option {
+      display: none;
+    }
+
+    .scan-depth-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 10px;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+
+    .scan-depth-label:hover {
+      border-color: var(--border-strong);
+      background: var(--bg-hover);
+    }
+
+    .scan-depth-option:checked+.scan-depth-label {
+      border-color: var(--active-color, var(--accent));
+      background: color-mix(in srgb, var(--active-color, var(--accent)) 8%, var(--bg-elev));
+      box-shadow: 0 0 0 1px var(--active-color, var(--accent));
+    }
+
+    .scan-depth-label .scan-icon { font-size: 20px; }
+    .scan-depth-label .scan-name {
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .scan-depth-label .scan-desc {
+      font-size: 10px;
+      color: var(--text-faint);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      line-height: 1.4;
+    }
+
+    #depth-light  { --active-color: var(--scan-light); }
+    #depth-medium { --active-color: var(--scan-med); }
+    #depth-deep   { --active-color: var(--scan-deep); }
+    #depth-light:checked  + .scan-depth-label .scan-name { color: var(--scan-light); }
+    #depth-medium:checked + .scan-depth-label .scan-name { color: var(--scan-med); }
+    #depth-deep:checked   + .scan-depth-label .scan-name { color: var(--scan-deep); }
+
+    .btn-launch {
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      background: var(--accent);
+      color: #0a0a0b;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+      font-family: var(--font-sans);
+    }
+
+    .btn-launch::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.4s;
+    }
+
+    .btn-launch:hover {
+      background: var(--accent-bright);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+
+    .btn-launch:hover::before { transform: translateX(100%); }
+    .btn-launch:active { transform: translateY(0); }
+    .btn-launch:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    /* separator */
+    .separator {
+      height: 1px;
+      background: var(--border);
+      margin: 40px 0;
+      position: relative;
+    }
+
+    .separator::before {
+      content: '◆ PREVIOUS INTELLIGENCE RECORDS ◆';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--bg);
+      padding: 0 16px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 2px;
+      white-space: nowrap;
+    }
+
+    /* records */
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::before { content: '▸'; }
+
+    .section-count {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-faint);
+      letter-spacing: 1px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+
+    .records-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 14px;
+    }
+
+    .record-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.15s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .record-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      border-radius: 0 2px 2px 0;
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.2s;
+    }
+
+    .record-card:hover { border-color: var(--border-strong); background: var(--bg-hover); }
+    .record-card:hover::before { transform: scaleY(1); }
+
+    .record-top { display: flex; align-items: center; gap: 12px; }
+
+    .record-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-dim), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--bg);
+      flex-shrink: 0;
+    }
+
+    .record-info { flex: 1; min-width: 0; }
+
+    .record-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .record-url {
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 700;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .record-stats {
+      display: flex;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .record-stat {
+      flex: 1;
+      padding: 8px 10px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .record-stat:last-child { border-right: none; }
+    .record-stat .v { font-size: 15px; font-weight: 900; color: var(--text); }
+    .record-stat .k {
+      font-size: 9px;
+      color: var(--text-faint);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-top: 1px;
+    }
+
+    .record-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .record-date {
+      font-size: 11px;
+      color: var(--text-faint);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .record-date::before { content: '⏱'; font-size: 11px; }
+
+    .btn-view {
+      padding: 7px 14px;
+      background: transparent;
+      border: 1px solid var(--border-strong);
+      border-radius: 5px;
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: all 0.15s;
+    }
+
+    .btn-view:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+    .btn-delete {
+      padding: 7px 12px;
+      background: transparent;
+      border: 1px solid rgba(255, 107, 107, 0.35);
+      border-radius: 5px;
+      color: var(--danger);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-delete:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+
+    /* ── confirm modal ── */
+    .confirm-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      background: rgba(10, 10, 11, 0.88);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .confirm-overlay.open { opacity: 1; pointer-events: all; }
+
+    .confirm-box {
+      background: var(--bg-card);
+      border: 1px solid var(--danger);
+      border-radius: 14px;
+      padding: 36px 40px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 0 60px rgba(255, 107, 107, 0.15);
+    }
+
+    .confirm-icon { font-size: 36px; margin-bottom: 14px; }
+
+    .confirm-title {
+      font-size: 17px;
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .confirm-sub {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      line-height: 1.6;
+    }
+
+    .confirm-target {
+      font-size: 12px;
+      color: var(--danger);
+      font-weight: 700;
+      background: rgba(255, 107, 107, 0.08);
+      border: 1px solid rgba(255, 107, 107, 0.2);
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin: 12px 0 16px;
+      word-break: break-all;
+      text-align: left;
+    }
+
+    .confirm-warn {
+      font-size: 11px;
+      color: var(--text-faint);
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .confirm-warn strong { color: var(--danger); }
+
+    .confirm-btns { display: flex; gap: 10px; justify-content: center; }
+
+    .confirm-cancel {
+      padding: 10px 22px;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: all 0.15s;
+    }
+
+    .confirm-cancel:hover { border-color: var(--border-strong); color: var(--text); }
+
+    .confirm-delete {
+      padding: 10px 22px;
+      background: var(--danger);
+      border: none;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: all 0.15s;
+    }
+
+    .confirm-delete:hover { background: #ff3333; }
+    .confirm-delete:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .empty-records {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--bg-card);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+    }
+
+    .empty-records .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
+    .empty-records .empty-title { font-size: 14px; font-weight: 700; color: var(--text-dim); margin-bottom: 6px; }
+    .empty-records .empty-sub { font-size: 12px; color: var(--text-faint); font-weight: 700; letter-spacing: 0.5px; }
+
+    /* footer */
+    .footer {
+      margin-top: 60px;
+      padding: 18px 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-faint);
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .footer-left { display: flex; gap: 24px; }
+    .footer-left span strong { color: var(--accent); font-weight: 900; }
+
+    /* pipeline overlay */
+    .pipeline-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(10, 10, 11, 0.92);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .pipeline-overlay.active { opacity: 1; pointer-events: all; }
+
+    .pipeline-box {
+      background: var(--bg-card);
+      border: 1px solid var(--accent);
+      border-radius: 16px;
+      padding: 40px 48px;
+      text-align: center;
+      min-width: 380px;
+      box-shadow: 0 0 80px var(--accent-glow);
+    }
+
+    .pipeline-spinner {
+      width: 56px;
+      height: 56px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg) } }
+
+    .pipeline-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .pipeline-sub {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 24px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .pipeline-steps { display: flex; flex-direction: column; gap: 8px; text-align: left; }
+
+    .pipeline-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--text-faint);
+      padding: 8px 12px;
+      background: var(--bg-elev);
+      border-radius: 6px;
+      border-left: 2px solid var(--border);
+      transition: all 0.3s;
+    }
+
+    .pipeline-step .step-icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
+    .pipeline-step.active { color: var(--accent); border-left-color: var(--accent); }
+    .pipeline-step.done   { color: var(--success); border-left-color: var(--success); }
+    .pipeline-step.error  { color: var(--danger);  border-left-color: var(--danger); }
+
+    .vspin {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    @media(max-width:900px) {
+      .hero { grid-template-columns: 1fr; gap: 32px; }
+      .records-grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 32px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-logo"></div>
+      <div class="brand-text">
+        <h1>Birdy-Edwards <span class="brand-badge">LITE</span></h1>
+        <div class="subtitle">Infiltrate &amp; Expose · Intel Console</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="status-pill"><span class="status-dot"></span> SYSTEM READY</div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span id="themeIcon">☾</span> <span id="themeLabel">DARK</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="hero">
+
+      <!-- LEFT -->
+      <div class="hero-left">
+        <div class="hero-tag">Facebook SOCMINT Platform · Lite Edition</div>
+        <h1 class="hero-title">BIRDY-EDWARDS<br>Social Media<br><em>Intelligence</em></h1>
+        <p class="hero-desc">
+          Birdy-Edwards Lite performs local-first Facebook SOCMINT analysis with zero LLM
+          dependencies. Profile scraping, interaction network mapping, co-commentor clustering,
+          and CNN / HOG -based face analysis — all on your machine, no cloud, no telemetry.
+        </p>
+        <div class="hero-features">
+          <div class="hero-feature">Frequency-weighted interaction network graphs</div>
+          <div class="hero-feature">Co-commentor matrix + force-directed cluster view</div>
+          <div class="hero-feature">CNN / HOG face clustering — no LLM required</div>
+          <div class="hero-feature">Top 7 interactor metadata gathering</div>
+          <div class="hero-feature">Date-wise interaction growth timeline</div>
+          <div class="hero-feature">100% local · No external API calls</div>
+          <div class="hero-feature">If you want full AI-Powered version check this repo <a href="https://github.com/jeet-ganguly/birdy-edwards">Click</a></div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="num">4</div><div class="lbl">Scrapers</div></div>
+          <div class="hero-stat"><div class="num">CNN / HOG</div><div class="lbl">Face Model</div></div>
+          <div class="hero-stat"><div class="num">0</div><div class="lbl">LLM Deps</div></div>
+          <div class="hero-stat"><div class="num">∞</div><div class="lbl">Local Runs</div></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: scan panel -->
+      <div class="scan-panel">
+        <div class="scan-panel-title">New Investigation</div>
+
+        <div class="cookie-bar idle" id="cookieBar">
+          <span class="cookie-bar-text" id="cookieBarText">⏳ Checking session...</span>
+          <div class="cookie-bar-btns">
+            <button class="btn-sm" id="btnVerify" onclick="verifySession()" type="button" style="display:none">
+              VERIFY SESSION
+            </button>
+            <button class="btn-sm" id="btnToggleImport" onclick="toggleImport()" type="button">
+              IMPORT COOKIES
+            </button>
+          </div>
+        </div>
+
+        <div class="cookie-import-box" id="cookieImportBox">
+          <div class="form-group" style="margin-bottom:10px">
+            <label class="form-label" for="cookieStr">Cookie JSON Array</label>
+            <textarea class="form-textarea" id="cookieStr" rows="4"
+              placeholder='Paste JSON array from DevTools&#10;[{"name":"c_user","value":"..."},{"name":"xs","value":"..."}]'></textarea>
+            <div class="cookie-hint">▸ Facebook → Cookie Editor extenssion → Export in JSON → Paste Here</div>
+          </div>
+          <button class="btn-sm" id="btnSaveCookies" onclick="importCookies()" type="button">SAVE COOKIES</button>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="profileUrl">Facebook Profile URL</label>
+          <input class="form-input" id="profileUrl" type="url"
+            placeholder="https://www.facebook.com/target.profile" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Scan Depth</label>
+          <div class="scan-depth-grid">
+            <div>
+              <input type="radio" name="depth" id="depth-light" value="light" class="scan-depth-option" checked>
+              <label for="depth-light" class="scan-depth-label">
+                <span class="scan-icon"></span>
+                <span class="scan-name">Light</span>
+                <span class="scan-desc">5 posts<br>5 reels<br>5 photos</span>
+              </label>
+            </div>
+            <div>
+              <input type="radio" name="depth" id="depth-medium" value="medium" class="scan-depth-option">
+              <label for="depth-medium" class="scan-depth-label">
+                <span class="scan-icon"></span>
+                <span class="scan-name">Medium</span>
+                <span class="scan-desc">10 posts<br>10 reels<br>10 photos</span>
+              </label>
+            </div>
+            <div>
+              <input type="radio" name="depth" id="depth-deep" value="deep" class="scan-depth-option">
+              <label for="depth-deep" class="scan-depth-label">
+                <span class="scan-icon"></span>
+                <span class="scan-name">Deep</span>
+                <span class="scan-desc">20 posts<br>20 reels<br>20 photos</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-launch" id="btnLaunch" onclick="startPipeline()" disabled>
+          ▶ START INVESTIGATION
+        </button>
+      </div>
+    </div>
+
+    <!-- RECORDS -->
+    <div class="separator"></div>
+    <div class="section-head">
+      <div class="section-title">Previous Investigation Records</div>
+      <div class="section-count" id="recordCount">— RECORDS</div>
+    </div>
+    <div class="records-grid" id="recordsGrid">
+      <div class="empty-records">
+        <div class="empty-icon">⏳</div>
+        <div class="empty-title">Loading records...</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-left">
+        <span>PROGRAMMING LANGUAGE · <strong>PYTHON</strong></span>
+        <span>MODEL · <strong>CNN / HOG FACE_RECOGNITION</strong></span>
+        <span>MODE · <strong>LITE (NO LLM)</strong></span>
+      </div>
+      <div>BIRDY-EDWARDS v0.9 · AUTHORIZED USE ONLY</div>
+    </div>
+  </div>
+
+  <!-- ── DELETE CONFIRM MODAL ── -->
+  <div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-box">
+      <div class="confirm-icon">🗑</div>
+      <div class="confirm-title">PURGE INVESTIGATION?</div>
+      <div class="confirm-sub">All gathered intelligence for:</div>
+      <div class="confirm-target" id="confirmTarget">–</div>
+      <div class="confirm-warn">
+        Posts · comments · interactors · face clusters · about data · image files<br>
+        <strong>This cannot be undone.</strong>
+      </div>
+      <div class="confirm-btns">
+        <button class="confirm-cancel" onclick="closeConfirm()">CANCEL</button>
+        <button class="confirm-delete" id="confirmDeleteBtn" onclick="executeDelete()">⚠ DELETE ALL</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIPELINE OVERLAY -->
+  <div class="pipeline-overlay" id="pipelineOverlay">
+    <div class="pipeline-box">
+      <div class="pipeline-spinner"></div>
+      <div class="pipeline-title" id="pipelineTitle">INVESTIGATION ACTIVE</div>
+      <div class="pipeline-sub" id="pipelineSub">Initializing...</div>
+      <div class="pipeline-steps" id="pipelineSteps"></div>
+    </div>
+  </div>
+
+  <script>
+    // ── THEME ──────────────────────────────────────────────────────────────────
+    function toggleTheme() {
+      const html = document.documentElement;
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      document.getElementById('themeIcon').textContent = next === 'dark' ? '☾' : '☀';
+      document.getElementById('themeLabel').textContent = next.toUpperCase();
+    }
+
+    // ── COOKIE MANAGEMENT ──────────────────────────────────────────────────────
+    let cookieReady = false;
+
+    async function checkCookieStatus() {
+      try {
+        const res = await fetch('/api/check-cookies');
+        const data = await res.json();
+        applyCookieUI(data);
+      } catch (e) {
+        setCookieBar('warn', '⚠ Server unreachable');
+      }
+    }
+
+    function applyCookieUI(data) {
+      const btnVerify = document.getElementById('btnVerify');
+      const btnToggle = document.getElementById('btnToggleImport');
+
+      if (!data.exists || !data.count) {
+        cookieReady = false;
+        setCookieBar('warn', '⚠ No cookies found — import required before scanning');
+        btnVerify.style.display = 'none';
+        btnToggle.textContent = 'IMPORT COOKIES';
+        openImport();
+      } else if (data.error) {
+        cookieReady = false;
+        setCookieBar('warn', `⚠ ${data.error} — re-import required`);
+        btnVerify.style.display = 'none';
+        btnToggle.textContent = 'RE-IMPORT';
+        openImport();
+      } else if (data.valid === false) {
+        cookieReady = false;
+        setCookieBar('warn', '⚠ Session expired — paste fresh cookies below');
+        btnVerify.style.display = 'none';
+        btnToggle.textContent = 'RE-IMPORT';
+        openImport();
+      } else {
+        cookieReady = true;
+        const suffix = data.valid === true ? ' · Session verified ✓' : '';
+        setCookieBar('ok', `✓ Cookie file ready (${data.count} cookies)${suffix}`);
+        btnVerify.style.display = data.valid === true ? 'none' : 'inline-flex';
+        btnToggle.textContent = 'RE-IMPORT';
+        closeImport();
+      }
+      document.getElementById('btnLaunch').disabled = !cookieReady;
+    }
+
+    function setCookieBar(type, text) {
+      const bar = document.getElementById('cookieBar');
+      bar.className = 'cookie-bar ' + type;
+      document.getElementById('cookieBarText').textContent = text;
+    }
+
+    function toggleImport() {
+      const box = document.getElementById('cookieImportBox');
+      box.classList.contains('open') ? closeImport() : openImport();
+    }
+    function openImport()  { document.getElementById('cookieImportBox').classList.add('open'); }
+    function closeImport() { document.getElementById('cookieImportBox').classList.remove('open'); }
+
+    async function importCookies() {
+      const raw = document.getElementById('cookieStr').value.trim();
+      if (!raw) {
+        document.getElementById('cookieStr').style.borderColor = 'var(--danger)';
+        setTimeout(() => document.getElementById('cookieStr').style.borderColor = '', 1500);
+        return;
+      }
+      const btn = document.getElementById('btnSaveCookies');
+      btn.textContent = 'SAVING...';
+      btn.disabled = true;
+      try {
+        const res = await fetch('/api/import-cookies', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cookies: raw }),
+        });
+        const data = await res.json();
+        if (data.ok) {
+          btn.textContent = `✓ SAVED (${data.count})`;
+          btn.style.color = 'var(--success)';
+          document.getElementById('cookieStr').value = '';
+          setTimeout(() => {
+            btn.textContent = 'SAVE COOKIES'; btn.style.color = ''; btn.disabled = false;
+            checkCookieStatus();
+          }, 1800);
+        } else {
+          alert('Cookie import error:\n' + data.error);
+          btn.textContent = 'SAVE COOKIES'; btn.disabled = false;
+        }
+      } catch (e) {
+        alert('Network error: ' + e);
+        btn.textContent = 'SAVE COOKIES'; btn.disabled = false;
+      }
+    }
+
+    // ── YOUR VERIFY LOGIC (unchanged) ──────────────────────────────────────────
+    function applyCookieUI_verify(data) {
+      const btnVerify = document.getElementById('btnVerify');
+      const btnToggle = document.getElementById('btnToggleImport');
+
+      if (!data.ok || !data.valid) {
+        cookieReady = false;
+        setCookieBar('warn', '⚠ No cookies found — import required before scanning');
+        btnVerify.style.display = 'none';
+        btnToggle.textContent = 'IMPORT COOKIES';
+        openImport();
+      } else if (data.error == 'Selenium') {
+        cookieReady = false;
+        setCookieBar('warn', `⚠ ${data.error} — not downloaded`);
+        btnVerify.style.display = 'none';
+        btnToggle.textContent = 'Error!';
+        openImport();
+      } else if (data.error) {
+        cookieReady = false;
+        setCookieBar('warn', `⚠ ${data.error} — re-import required`);
+        btnVerify.style.display = 'none';
+        btnToggle.textContent = 'RE-IMPORT';
+        openImport();
+      } else if (data.valid === false) {
+        cookieReady = false;
+        setCookieBar('warn', '⚠ Session expired — paste fresh cookies below');
+        btnVerify.style.display = 'none';
+        btnToggle.textContent = 'RE-IMPORT';
+        openImport();
+      } else {
+        cookieReady = true;
+        setCookieBar('ok', `✓ Cookie file ready`);
+        btnVerify.style.display = data.valid === true ? 'none' : 'inline-flex';
+        btnToggle.textContent = 'RE-IMPORT';
+        closeImport();
+      }
+      document.getElementById('btnLaunch').disabled = !cookieReady;
+    }
+
+    async function verifySession() {
+      const btn = document.getElementById('btnVerify');
+      btn.innerHTML = '<span class="vspin"></span> VERIFYING...';
+      btn.disabled = true;
+      setCookieBar('idle', '⏳ Verifying — please wait...');
+      try {
+        const res = await fetch('/api/verify-session');
+        const data = await res.json();
+        applyCookieUI_verify(data);
+      } catch (e) {
+        setCookieBar('warn', '⚠ Verify failed — ' + e.message);
+      } finally {
+        btn.innerHTML = 'VERIFY SESSION';
+        btn.disabled = false;
+      }
+    }
+
+    // ── RECORDS ────────────────────────────────────────────────────────────────
+    function initials(n) { return n.split(' ').map(x => x[0]).join('').slice(0, 2).toUpperCase(); }
+    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    function fmtDate(iso) {
+      if (!iso) return '—';
+      try {
+        const d = new Date(iso);
+        return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+          + ' · ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+      } catch { return iso; }
+    }
+
+    async function loadRecords() {
+      const grid  = document.getElementById('recordsGrid');
+      const count = document.getElementById('recordCount');
+      try {
+        const res  = await fetch('/api/investigations');
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+        const recs = data.records;
+        count.textContent = recs.length + ' RECORD' + (recs.length !== 1 ? 'S' : '');
+        if (!recs.length) {
+          grid.innerHTML = `<div class="empty-records">
+            <div class="empty-icon">📭</div>
+            <div class="empty-title">No Previous Investigations</div>
+            <div class="empty-sub">Run your first pipeline scan above to get started</div>
+          </div>`;
+          return;
+        }
+        grid.innerHTML = recs.map(r => `
+          <div class="record-card" onclick="openReport(${r.id})">
+            <div class="record-top">
+              <div class="record-avatar">${initials(r.name)}</div>
+              <div class="record-info">
+                <div class="record-name">${esc(r.name)}</div>
+                <div class="record-url">${esc(r.url)}</div>
+              </div>
+            </div>
+            <div class="record-stats">
+              <div class="record-stat"><div class="v">${r.post_count.toLocaleString()}</div><div class="k">Posts</div></div>
+              <div class="record-stat"><div class="v">${r.interactor_count}</div><div class="k">Interactors</div></div>
+              <div class="record-stat"><div class="v">${r.face_count}</div><div class="k">Faces</div></div>
+            </div>
+            <div class="record-footer">
+              <div class="record-date">${fmtDate(r.scraped_at)}</div>
+              <div style="display:flex;gap:8px;align-items:center">
+                <button class="btn-delete"
+                  data-id="${r.id}"
+                  data-name="${r.name}"
+                  data-url="${r.url}"
+                  onclick="event.stopPropagation();confirmDelete(this)"
+                  title="Delete investigation">✕ DELETE</button>
+                <button class="btn-view" onclick="event.stopPropagation();openReport(${r.id})">VIEW REPORT</button>
+              </div>
+            </div>
+          </div>`).join('');
+      } catch (e) {
+        grid.innerHTML = `<div class="empty-records">
+          <div class="empty-icon">⚠</div>
+          <div class="empty-title">Failed to load records</div>
+          <div class="empty-sub">${esc(e.message)}</div>
+        </div>`;
+      }
+    }
+
+    function openReport(id) { window.location.href = `/analysis?id=${id}`; }
+
+    // ── PIPELINE ───────────────────────────────────────────────────────────────
+    const STEP_LABELS = {
+      about: 'Collecting — About / Profile Info', photos: 'Collecting — Photos + Comments',
+      reels: 'Collecting — Reels + Comments',     posts: 'Collecting — Posts + Comments',
+      db: 'Database Import',                    frequency: 'Frequency Scoring',
+      top7: 'Top 7 Metadata Gather',            face: 'Face Clustering — CNN / HOG',
+    };
+    const STEP_ICONS = { pending: '⏳', active: '⟳', done: '✓', error: '✗' };
+    let pollTimer = null;
+
+    function buildSteps() {
+      document.getElementById('pipelineSteps').innerHTML =
+        Object.entries(STEP_LABELS).map(([id, lbl]) =>
+          `<div class="pipeline-step" id="pstep-${id}"><span class="step-icon">⏳</span> ${lbl}</div>`
+        ).join('');
+    }
+
+    async function startPipeline() {
+      const url   = document.getElementById('profileUrl').value.trim();
+      const depth = document.querySelector('input[name="depth"]:checked')?.value || 'light';
+      if (!url) {
+        document.getElementById('profileUrl').style.borderColor = 'var(--danger)';
+        document.getElementById('profileUrl').focus();
+        setTimeout(() => document.getElementById('profileUrl').style.borderColor = '', 1800);
+        return;
+      }
+      if (!cookieReady) {
+        alert('⚠ Cookie session not ready.\nPlease import your Facebook cookies first.');
+        openImport(); return;
+      }
+      try {
+        const res = await fetch('/api/start-pipeline', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profile_url: url, depth }),
+        });
+        const data = await res.json();
+        if (!data.ok) { alert('Failed to start:\n' + data.error); return; }
+      } catch (e) { alert('Network error: ' + e); return; }
+
+      buildSteps();
+      document.getElementById('pipelineTitle').textContent = 'PIPELINE ACTIVE';
+      document.getElementById('pipelineSub').textContent   = url;
+      document.getElementById('pipelineOverlay').classList.add('active');
+      pollTimer = setInterval(pollPipeline, 1500);
+    }
+
+    async function pollPipeline() {
+      try {
+        const res  = await fetch('/api/pipeline-status');
+        const data = await res.json();
+        (data.steps || []).forEach(s => {
+          const el = document.getElementById('pstep-' + s.id);
+          if (!el) return;
+          el.className = 'pipeline-step' + (s.status !== 'pending' ? ' ' + s.status : '');
+          el.querySelector('.step-icon').textContent = STEP_ICONS[s.status] || '⏳';
+        });
+        if (!data.running) {
+          clearInterval(pollTimer); pollTimer = null;
+          if (data.error) {
+            document.getElementById('pipelineTitle').textContent = 'PIPELINE ERROR';
+            document.getElementById('pipelineSub').textContent   = data.error;
+            setTimeout(() => {
+              document.getElementById('pipelineOverlay').classList.remove('active');
+              loadRecords();
+            }, 4000);
+          } else {
+            document.getElementById('pipelineTitle').textContent = 'COMPLETE ✓';
+            document.getElementById('pipelineSub').textContent   = 'Redirecting...';
+            setTimeout(() => {
+              if (data.profile_id) window.location.href = `/analysis?id=${data.profile_id}`;
+              else { document.getElementById('pipelineOverlay').classList.remove('active'); loadRecords(); }
+            }, 1200);
+          }
+        }
+      } catch (e) { console.warn('Poll error:', e); }
+    }
+
+    // ── DELETE INVESTIGATION ───────────────────────────────────────────────────
+    let _deleteId = null;
+
+    function confirmDelete(btn) {
+      // btn is the actual <button> element — read raw values from dataset
+      _deleteId      = parseInt(btn.dataset.id, 10);
+      const name     = btn.dataset.name || '';
+      const url      = btn.dataset.url  || '';
+      const label    = (name && name !== 'Unknown') ? name + '\n' + url : (url || 'ID #' + _deleteId);
+      document.getElementById('confirmTarget').textContent      = label;
+      document.getElementById('confirmDeleteBtn').disabled      = false;
+      document.getElementById('confirmDeleteBtn').textContent   = '⚠ DELETE ALL';
+      document.getElementById('confirmOverlay').classList.add('open');
+    }
+
+    function closeConfirm() {
+      _deleteId = null;
+      document.getElementById('confirmOverlay').classList.remove('open');
+    }
+
+    async function executeDelete() {
+      if (!_deleteId) return;
+      const btn = document.getElementById('confirmDeleteBtn');
+      btn.disabled    = true;
+      btn.textContent = 'DELETING...';
+      try {
+        const res  = await fetch(`/api/investigations/${_deleteId}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.ok) {
+          closeConfirm();
+          loadRecords();
+        } else {
+          alert('Delete failed:\n' + data.error);
+          btn.disabled    = false;
+          btn.textContent = '⚠ DELETE ALL';
+        }
+      } catch (e) {
+        alert('Network error: ' + e);
+        btn.disabled    = false;
+        btn.textContent = '⚠ DELETE ALL';
+      }
+    }
+
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeConfirm();
+    });
+
+    // ── INIT ───────────────────────────────────────────────────────────────────
+    checkCookieStatus();
+    loadRecords();
+  </script>
+</body>
+
+</html>

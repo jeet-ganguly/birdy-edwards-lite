@@ -1,0 +1,53 @@
+# ── Sensitive / Auth ──────────────────────────────────────────────────────────
+app/fb_cookies.pkl
+
+# ── Database ──────────────────────────────────────────────────────────────────
+app/socmint_lite.db
+
+# ── Data gathering JSON output ────────────────────────────────────────────────
+app/fb_about.json
+app/fb_photos.json
+app/fb_reels.json
+app/fb_posts.json
+
+# ── Runtime directories ───────────────────────────────────────────────────────
+app/face_data/
+app/post_screenshots
+app/downloaded_files
+
+# ── Python cache ──────────────────────────────────────────────────────────────
+__pycache__/
+app/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+dist/
+build/
+.eggs/
+venv/
+env/
+.venv/
+
+# ── Test files ────────────────────────────────────────────────────────────────
+test.py
+test_*.py
+debug_*.py
+app/test.py
+app/test_*.py
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*.suo
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
