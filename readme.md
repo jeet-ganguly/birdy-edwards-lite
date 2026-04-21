@@ -22,7 +22,7 @@
 
 ## What is Birdy-Edwards Lite?
 
-Birdy-Edwards Lite is a stripped-down, dependency-light edition of the full Birdy-Edwards SOCMINT platform. It performs the same core profile intelligence workflow — data gathering, interaction mapping, face clustering, and network visualization — without requiring any AI model, Docker container, or cloud service.
+Birdy-Edwards Lite is a stripped-down, dependency-light edition of the full Birdy-Edwards FACEBOOK SOCMINT platform. It performs the same core profile intelligence workflow — data gathering, interaction mapping, face clustering, and network visualization — without requiring any AI model, Docker container, or cloud service.
 
 Everything runs on your local machine. No GPU required. No model downloads. No external API calls.
 
