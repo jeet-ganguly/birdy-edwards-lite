@@ -10,7 +10,6 @@
 [![Flask](https://img.shields.io/badge/Flask-Web%20UI-black?style=flat-square&logo=flask)](https://flask.palletsprojects.com)
 [![SeleniumBase](https://img.shields.io/badge/SeleniumBase-Undetected%20Chrome-green?style=flat-square)](https://github.com/seleniumbase/SeleniumBase)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)]()
-[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows-lightgrey?style=flat-square)]()
 [![LLM](https://img.shields.io/badge/LLM%20Required-None-brightgreen?style=flat-square)]()
 
 **Local-first Facebook SOCMINT platform — no LLM, no Docker, no cloud dependency.**
