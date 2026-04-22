@@ -719,36 +719,36 @@ def api_face_clusters(profile_id):
         con.row_factory = sqlite3.Row
         cur = con.cursor()
         cur.execute("""
-            SELECT fc.id, fc.person_label, fc.representative_face,
-                   fc.appearance_count, fc.post_ids, fc.created_at,
-                   COUNT(df.id) as face_count
+            SELECT DISTINCT fc.id, fc.person_label, fc.representative_face,
+                            fc.appearance_count, fc.post_ids, fc.created_at
             FROM face_clusters fc
-            LEFT JOIN detected_faces df ON df.person_id = fc.id
-            LEFT JOIN photo_posts pp    ON pp.id = df.photo_post_id
-            WHERE pp.profile_id = ? OR pp.profile_id IS NULL
-            GROUP BY fc.id
+            WHERE fc.id IN (
+                SELECT DISTINCT df.person_id
+                FROM detected_faces df
+                LEFT JOIN photo_posts pp ON pp.id = df.photo_post_id
+                LEFT JOIN text_posts  tp ON tp.id = df.text_post_id
+                WHERE df.person_id IS NOT NULL
+                  AND (pp.profile_id = ? OR tp.profile_id = ?)
+            )
             ORDER BY fc.appearance_count DESC
-        """, (profile_id,))
-        clusters = [dict(r) for r in cur.fetchall()]
+        """, (profile_id, profile_id))
+        rows = [dict(r) for r in cur.fetchall()]
         con.close()
-        return jsonify({'ok': True, 'data': clusters})
+        return jsonify({'ok': True, 'data': rows})
     except Exception as e:
         return jsonify({'ok': False, 'error': str(e)}), 500
  
  
 @app.route('/api/face-cluster/<int:cluster_id>/members')
 def api_face_cluster_members(cluster_id):
-    """
-    Return all detected face crops for a given cluster.
-    Used by analysis.html face side-panel to show every crop, not just the representative.
-    """
     import sqlite3
     try:
         con = sqlite3.connect(DB_FILE)
         con.row_factory = sqlite3.Row
         cur = con.cursor()
         cur.execute("""
-            SELECT id, photo_post_id, face_index, face_image_path, detected_at
+            SELECT id, photo_post_id, text_post_id,
+                   face_index, face_image_path, person_id
             FROM detected_faces
             WHERE person_id = ?
             ORDER BY id
@@ -758,7 +758,6 @@ def api_face_cluster_members(cluster_id):
         return jsonify({'ok': True, 'data': rows})
     except Exception as e:
         return jsonify({'ok': False, 'error': str(e)}), 500
- 
 
  
 @app.route('/logo')

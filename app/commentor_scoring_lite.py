@@ -135,7 +135,6 @@ def get_graph_data(db_file=DB_FILE, profile_id=None):
             FROM photo_comments pc
             JOIN photo_posts pp ON pp.id = pc.photo_post_id
             WHERE pc.commentor_id = ? AND pp.profile_id = ?
-            LIMIT 5
         """, (c['commentor_id'], profile_id))
         comments = [{'comment_text': r[0], 'post_url': r[1], 'type': 'photo'}
                     for r in cur.fetchall()]
@@ -145,7 +144,6 @@ def get_graph_data(db_file=DB_FILE, profile_id=None):
             FROM reel_comments rc
             JOIN reel_posts rp ON rp.id = rc.reel_post_id
             WHERE rc.commentor_id = ? AND rp.profile_id = ?
-            LIMIT 3
         """, (c['commentor_id'], profile_id))
         comments += [{'comment_text': r[0], 'post_url': r[1], 'type': 'reel'}
                      for r in cur.fetchall()]
@@ -155,7 +153,6 @@ def get_graph_data(db_file=DB_FILE, profile_id=None):
             FROM text_comments tc
             JOIN text_posts tp ON tp.id = tc.text_post_id
             WHERE tc.commentor_id = ? AND tp.profile_id = ?
-            LIMIT 3
         """, (c['commentor_id'], profile_id))
         comments += [{'comment_text': r[0], 'post_url': r[1], 'type': 'text'}
                      for r in cur.fetchall()]

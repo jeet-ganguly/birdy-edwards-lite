@@ -94,6 +94,7 @@ def run_face_clustering(db_file: str, profile_id: int):
         all_face_data.extend(faces)
 
     # process text post screenshots
+    print(f"  {len(text_posts)} text post screenshots to process")  
     for post in text_posts:
         post_id       = post['id']
         screenshot    = post['screenshot_path']
