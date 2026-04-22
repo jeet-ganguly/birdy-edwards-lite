@@ -26,7 +26,7 @@ Birdy-Edwards Lite is a stripped-down, dependency-light edition of the full Bird
 
 Everything runs on your local machine. No GPU required. No model downloads. No external API calls.
 
-It is designed for investigators who want fast, reproducible results on modest hardware, or who want to run the tool without the overhead of the full AI-powered version.
+It is designed for investigators who want fast, reproducible results on modest hardware, or who want to run the tool without the overhead of the full AI-powered version. For AI powered version check this repo [click here](https://github.com/jeet-ganguly/birdy-edwards) 
 
 
 <img src="app/icons/demo.png" alt="BIRDY-EDWARDS Web UI" width="100%"/>
