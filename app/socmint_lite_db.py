@@ -160,16 +160,30 @@ CREATE TABLE IF NOT EXISTS face_clusters (
 -- Detected faces
 CREATE TABLE IF NOT EXISTS detected_faces (
     id                INTEGER PRIMARY KEY AUTOINCREMENT,
-    photo_post_id     INTEGER NOT NULL,
+    photo_post_id     INTEGER,              -- NULL for text post faces
+    text_post_id      INTEGER,              -- NULL for photo post faces
     face_index        INTEGER DEFAULT 0,
     face_image_path   TEXT,
     encoding          BLOB,
     person_id         INTEGER,
     detected_at       TEXT DEFAULT (datetime('now')),
     FOREIGN KEY (photo_post_id) REFERENCES photo_posts(id),
+    FOREIGN KEY (text_post_id)  REFERENCES text_posts(id),
     FOREIGN KEY (person_id)     REFERENCES face_clusters(id)
 );
 """
+
+def migrate_db(db_file=DB_FILE):
+    """Add text_post_id column to detected_faces if it doesn't exist yet."""
+    con = sqlite3.connect(db_file)
+    cur = con.cursor()
+    cur.execute("PRAGMA table_info(detected_faces)")
+    columns = [row[1] for row in cur.fetchall()]
+    if 'text_post_id' not in columns:
+        cur.execute("ALTER TABLE detected_faces ADD COLUMN text_post_id INTEGER REFERENCES text_posts(id)")
+        print("  DB migrated: added text_post_id to detected_faces")
+    con.commit()
+    con.close()
 
 
 def init_db(db_file=DB_FILE):
@@ -178,6 +192,7 @@ def init_db(db_file=DB_FILE):
     con.executescript(SCHEMA)
     con.commit()
     con.close()
+    migrate_db(db_file)    # ← add this line
     print(f"  DB initialized: {db_file}")
 
 

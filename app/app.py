@@ -805,6 +805,84 @@ def face_image(filepath):
         return send_file(full)
     return '', 404
 
+@app.route('/api/photo-posts/<int:profile_id>')
+def api_photo_posts(profile_id):
+    import sqlite3
+    try:
+        con = sqlite3.connect(DB_FILE)
+        con.row_factory = sqlite3.Row
+        cur = con.cursor()
+        cur.execute("""
+            SELECT
+                pp.id, pp.photo_url, pp.image_src, pp.caption, pp.date_text,
+                COUNT(pc.id) AS interaction_count
+            FROM photo_posts pp
+            LEFT JOIN photo_comments pc ON pc.photo_post_id = pp.id
+            WHERE pp.profile_id = ?
+            GROUP BY pp.id
+            ORDER BY pp.id DESC
+        """, (profile_id,))
+        rows = [dict(r) for r in cur.fetchall()]
+        con.close()
+        return jsonify({'ok': True, 'data': rows})
+    except Exception as e:
+        return jsonify({'ok': False, 'error': str(e)}), 500
+
+
+@app.route('/api/text-posts/<int:profile_id>')
+def api_text_posts(profile_id):
+    import sqlite3
+    try:
+        con = sqlite3.connect(DB_FILE)
+        con.row_factory = sqlite3.Row
+        cur = con.cursor()
+        cur.execute("""
+            SELECT
+                tp.id, tp.post_url, tp.screenshot_path, tp.date_text,
+                COUNT(tc.id) AS interaction_count
+            FROM text_posts tp
+            LEFT JOIN text_comments tc ON tc.text_post_id = tp.id
+            WHERE tp.profile_id = ?
+            GROUP BY tp.id
+            ORDER BY tp.id DESC
+        """, (profile_id,))
+        rows = [dict(r) for r in cur.fetchall()]
+        con.close()
+        return jsonify({'ok': True, 'data': rows})
+    except Exception as e:
+        return jsonify({'ok': False, 'error': str(e)}), 500
+
+
+@app.route('/api/reel-posts/<int:profile_id>')
+def api_reel_posts(profile_id):
+    import sqlite3
+    try:
+        con = sqlite3.connect(DB_FILE)
+        con.row_factory = sqlite3.Row
+        cur = con.cursor()
+        cur.execute("""
+            SELECT
+                rp.id, rp.reel_url, rp.scraped_at,
+                COUNT(rc.id) AS interaction_count
+            FROM reel_posts rp
+            LEFT JOIN reel_comments rc ON rc.reel_post_id = rp.id
+            WHERE rp.profile_id = ?
+            GROUP BY rp.id
+            ORDER BY rp.id DESC
+        """, (profile_id,))
+        rows = [dict(r) for r in cur.fetchall()]
+        con.close()
+        return jsonify({'ok': True, 'data': rows})
+    except Exception as e:
+        return jsonify({'ok': False, 'error': str(e)}), 500
+
+@app.route('/screenshot/<path:filepath>')
+def serve_screenshot(filepath):
+    full = os.path.join(BASE_DIR, filepath)
+    if os.path.exists(full):
+        return send_file(full)
+    return '', 404
+    
 #  MAIN
 
 if __name__ == '__main__':

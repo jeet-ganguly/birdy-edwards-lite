@@ -60,10 +60,19 @@ def run_face_clustering(db_file: str, profile_id: int):
         ORDER BY id
     """, (profile_id,))
     photo_posts = cur.fetchall()
+
+    # also fetch text post screenshots
+    cur.execute("""
+        SELECT id, post_url, screenshot_path
+        FROM text_posts
+        WHERE profile_id = ? AND screenshot_path IS NOT NULL AND screenshot_path != ''
+        ORDER BY id
+    """, (profile_id,))
+    text_posts = cur.fetchall()
     con.close()
 
-    if not photo_posts:
-        print("  ⚠ No photo posts with image_src — skipping face detection")
+    if not photo_posts and not text_posts:
+        print("  ⚠ No images or screenshots to process — skipping face detection")
         return
 
     print(f" {len(photo_posts)} photos to process")
@@ -80,8 +89,22 @@ def run_face_clustering(db_file: str, profile_id: int):
         image_src = post['image_src']
 
         faces = _process_image(post_id, image_src, raw_dir)
-        if faces:
-            print(f"  Post {post_id} → {len(faces)} face(s)")
+        for f in faces:
+            f['source_type'] = 'photo'   
+        all_face_data.extend(faces)
+
+    # process text post screenshots
+    for post in text_posts:
+        post_id       = post['id']
+        screenshot    = post['screenshot_path']
+
+        img_bytes = _load_local_image(screenshot)
+        if img_bytes is None:
+            continue
+
+        faces = _process_image(post_id, None, raw_dir, img_bytes=img_bytes)
+        for f in faces:
+            f['source_type'] = 'text'   
         all_face_data.extend(faces)
 
     print(f"\n Total faces detected: {len(all_face_data)}")
@@ -109,19 +132,20 @@ def run_face_clustering(db_file: str, profile_id: int):
     # write DB 
     _save_to_db(db_file, profile_id, all_face_data, clusters)
 
-    print(f"\n  ✅ Face intelligence complete")
+    print(f"\n  Face intelligence complete")
     print(f"     {len(all_face_data)} faces · {len(clusters)} clusters")
     print(f"     Saved to: {os.path.join(FACE_DATA_DIR, owner_name)}/")
 
 #  CORE IMAGE PROCESSING
 
-def _process_image(post_id: int, url: str, raw_dir: str) -> list:
+def _process_image(post_id: int, url: str | None, raw_dir: str, img_bytes: bytes = None) -> list:
     """
     Download, verify, detect, encode faces for one image.
     Returns list of face dicts. Never raises — logs and returns [] on any error.
     """
     # download 
-    img_bytes = _download_bytes(url)
+    if img_bytes is None:
+        img_bytes = _download_bytes(url)
     if img_bytes is None:
         return []
 
@@ -185,6 +209,18 @@ def _download_bytes(url: str) -> bytes | None:
         print(f"    ⚠ Download failed ({url[:70]}): {e}")
         return None
 
+def _load_local_image(path: str) -> bytes | None:
+    """Load a local screenshot file as bytes."""
+    try:
+        full = os.path.join(os.path.dirname(os.path.abspath(__file__)), path.lstrip('/'))
+        if not os.path.exists(full):
+            print(f"    ⚠ Screenshot not found: {full}")
+            return None
+        with open(full, 'rb') as f:
+            return f.read()
+    except Exception as e:
+        print(f"    ⚠ Screenshot load failed ({path}): {e}")
+        return None
 
 def _safe_open(img_bytes: bytes) -> Image.Image | None:
     """
@@ -375,12 +411,21 @@ def _save_to_db(db_file: str, profile_id: int, all_face_data: list, clusters: di
     con = sqlite3.connect(db_file)
     cur = con.cursor()
 
-    # clear existing data for this profile
+    # clear existing photo post faces
     cur.execute("""
         DELETE FROM detected_faces WHERE photo_post_id IN (
             SELECT id FROM photo_posts WHERE profile_id = ?
         )
     """, (profile_id,))
+
+    # clear existing text post faces
+    cur.execute("""
+        DELETE FROM detected_faces WHERE text_post_id IN (
+            SELECT id FROM text_posts WHERE profile_id = ?
+        )
+    """, (profile_id,))
+
+    # clear orphaned clusters
     cur.execute("""
         DELETE FROM face_clusters WHERE id NOT IN (
             SELECT DISTINCT person_id FROM detected_faces WHERE person_id IS NOT NULL
@@ -425,12 +470,16 @@ def _save_to_db(db_file: str, profile_id: int, all_face_data: list, clusters: di
         except Exception:
             enc_blob = None
 
+        is_photo = face.get('source_type') == 'photo'
+
         cur.execute("""
             INSERT INTO detected_faces
-                (photo_post_id, face_index, face_image_path, encoding, person_id, detected_at)
-            VALUES (?, ?, ?, ?, ?, ?)
+                (photo_post_id, text_post_id, face_index,
+                face_image_path, encoding, person_id, detected_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (
-            face['post_id'],
+            face['post_id'] if is_photo else None,   # photo_post_id
+            face['post_id'] if not is_photo else None, # text_post_id
             face['face_index'],
             face['image_path'],
             enc_blob,
