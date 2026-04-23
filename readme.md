@@ -12,7 +12,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)]()
 [![LLM](https://img.shields.io/badge/LLM%20Required-None-brightgreen?style=flat-square)]()
 
-**Local-first Facebook SOCMINT platform — no LLM, no Docker, no cloud dependency.**
+**Local-first Facebook SOCMINT platform — no LLM, no Docker, no cloud dependency. For AI powered version check this repo [click here](https://github.com/jeet-ganguly/birdy-edwards)**
 
 [Installation](#installation) · [Features](#features) · [Troubleshooting](#troubleshooting) · [Disclaimer](#️-disclaimer) · [Contributing](#contributing)
 
@@ -26,8 +26,7 @@ Birdy-Edwards Lite is a stripped-down, dependency-light edition of the full Bird
 
 Everything runs on your local machine. No GPU required. No model downloads. No external API calls.
 
-It is designed for investigators who want fast, reproducible results on modest hardware, or who want to run the tool without the overhead of the full AI-powered version. For AI powered version check this repo [click here](https://github.com/jeet-ganguly/birdy-edwards) 
-
+It is designed for investigators who want fast, reproducible results on modest hardware, or who want to run the tool without the overhead of the full AI-powered version.
 
 <img src="app/icons/demo.png" alt="BIRDY-EDWARDS Web UI" width="100%"/>
 
