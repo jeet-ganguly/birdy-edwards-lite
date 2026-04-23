@@ -106,11 +106,13 @@ It is designed for investigators who want fast, reproducible results on modest h
 
 | Component | Minimum | Recommended |
 |---|---|---|
-| OS | Ubuntu 22.04+ / Windows 10+ | Ubuntu 24.04 LTS |
+| OS | Ubuntu 22.04+ | Ubuntu 24.04 LTS |
 | Python | 3.10+ | 3.12 |
 | RAM | 4 GB | 8 GB |
 | Storage | 5 GB free | 10 GB free |
 | Browser | Chrome / Chromium | Latest Chrome |
+
+> Windows users must use wsl
 
 ---
 
